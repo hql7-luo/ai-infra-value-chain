@@ -1,0 +1,5 @@
+ticker,metric,start,end,value,source
+LITE,revenue,2025-06-29,2025-09-27,533800000,Lumentum Q1 FY26 earnings release (8-K Ex. 99.1) https://www.sec.gov/Archives/edgar/data/1633978/000162828025048860/lite_ex991xq1fy26.htm
+LITE,revenue,2025-09-28,2025-12-27,665500000,Lumentum Q2 FY26 earnings release (8-K Ex. 99.1) https://www.sec.gov/Archives/edgar/data/1633978/000162828026005005/lite_ex991xq2fy26.htm
+LITE,revenue,2025-12-28,2026-03-28,808400000,Lumentum Q3 FY26 earnings release (8-K Ex. 99.1) https://www.sec.gov/Archives/edgar/data/1633978/000162828026030530/lite_ex991xq3fy26.htm
+LITE,revenue,2025-06-29,2026-03-28,2007700000,Nine months FY26 = sum of the three quarters above

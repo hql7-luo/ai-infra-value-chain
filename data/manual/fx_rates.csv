@@ -1,0 +1,13 @@
+currency,period,local_per_usd,source
+CNY,FY2022,6.7290,Federal Reserve G.5A annual average (released 2026-01-05)
+CNY,FY2023,7.0809,Federal Reserve G.5A annual average (released 2026-01-05)
+CNY,FY2024,7.1957,Federal Reserve G.5A annual average (released 2026-01-05)
+CNY,FY2025,7.1875,Federal Reserve G.5A annual average (released 2026-01-05)
+CNY,H1_2025,7.2520,Average of FRED EXCHUS monthly values Jan-Jun 2025
+CNY,H1_2026,6.8634,Average of FRED EXCHUS monthly values Jan-Jun 2026
+TWD,FY2022,29.7963,Federal Reserve G.5A annual average (released 2026-01-05)
+TWD,FY2023,31.1525,Federal Reserve G.5A annual average (released 2026-01-05)
+TWD,FY2024,32.1064,Federal Reserve G.5A annual average (released 2026-01-05)
+TWD,FY2025,31.1663,Federal Reserve G.5A annual average (released 2026-01-05)
+TWD,H1_2025,31.8593,Average of FRED EXTAUS monthly values Jan-Jun 2025
+TWD,H1_2026,31.6099,Average of FRED EXTAUS monthly values Jan-Jun 2026
