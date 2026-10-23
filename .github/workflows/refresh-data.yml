@@ -1,0 +1,49 @@
+name: Refresh data and charts
+
+# Runs the full pipeline on GitHub's servers and commits the updated data and charts
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/**"
+      - "data/manual/**"
+      - "src/**"
+      - ".github/workflows/refresh-data.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install packages
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        run: |
+          python src/fetch_sec_data.py
+          if [ -f src/build_dataset.py ]; then python src/build_dataset.py; fi
+          if [ -f src/analyze.py ]; then python src/analyze.py; fi
+          if [ -f src/make_charts.py ]; then python src/make_charts.py; fi
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for folder in data charts outputs; do
+            if [ -e "$folder" ]; then git add "$folder"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Refresh data and charts"
+            git push
+          fi

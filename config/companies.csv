@@ -1,0 +1,22 @@
+ticker,company,layer,layer_order,cik,source,country
+MSFT,Microsoft,Cloud & AI platforms,1,789019,sec,US
+GOOGL,Alphabet,Cloud & AI platforms,1,1652044,sec,US
+AMZN,Amazon,Cloud & AI platforms,1,1018724,sec,US
+META,Meta Platforms,Cloud & AI platforms,1,1326801,sec,US
+ORCL,Oracle,Cloud & AI platforms,1,1341439,sec,US
+DELL,Dell Technologies,Servers & systems,2,1571996,sec,US
+SMCI,Super Micro Computer,Servers & systems,2,1375365,sec,US
+NVDA,NVIDIA,AI chips,3,1045810,sec,US
+AMD,Advanced Micro Devices,AI chips,3,2488,sec,US
+AVGO,Broadcom,AI chips,3,1730168,sec,US
+MRVL,Marvell Technology,AI chips,3,1835632,sec,US
+TSM,TSMC,Foundry,4,1046179,manual,Taiwan
+MU,Micron Technology,Memory & storage,5,723125,sec,US
+STX,Seagate Technology,Memory & storage,5,1137789,sec,US
+ANET,Arista Networks,Networking,6,1596532,sec,US
+LITE,Lumentum,Optical,7,1633978,sec,US
+COHR,Coherent,Optical,7,820318,sec,US
+FN,Fabrinet,Optical,7,1408710,sec,US
+300308.SZ,Innolight (中际旭创),Optical,7,,manual,China
+300502.SZ,Eoptolink (新易盛),Optical,7,,manual,China
+VRT,Vertiv,Power & cooling,8,1674101,sec,US
