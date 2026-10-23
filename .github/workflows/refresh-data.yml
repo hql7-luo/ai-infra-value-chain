@@ -45,8 +45,8 @@ jobs:
 
       - name: Commit results
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "hql7-luo"
+          git config user.email "205837717+hql7-luo@users.noreply.github.com"
           for folder in data charts outputs; do
             if [ -e "$folder" ]; then git add "$folder"; fi
           done
