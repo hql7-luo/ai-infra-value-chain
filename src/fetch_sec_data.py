@@ -21,8 +21,8 @@ USER_AGENT = os.environ.get(
     "SEC_USER_AGENT", "ai-infra-value-chain research project haoqi.luo23@hoosac.org"
 )
 
-# Each metric can be reported under different XBRL tags, so we keep all candidates
-METRIC_CONCEPTS = {
+# US filers (10-K / 10-Q, US GAAP). One metric can use different tags, so keep all candidates.
+US_GAAP_CONCEPTS = {
     "revenue": [
         "Revenues",
         "RevenueFromContractWithCustomerExcludingAssessedTax",
@@ -41,6 +41,18 @@ METRIC_CONCEPTS = {
     "operating_cash_flow": ["NetCashProvidedByUsedInOperatingActivities"],
 }
 
+# Foreign filers such as TSMC (20-F, IFRS, annual only, local currency)
+IFRS_CONCEPTS = {
+    "revenue": ["Revenue", "RevenueFromContractsWithCustomers"],
+    "gross_profit": ["GrossProfit"],
+    "operating_income": ["ProfitLossFromOperatingActivities"],
+    "capex": [
+        "PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+        "PurchaseOfPropertyPlantAndEquipment",
+    ],
+    "operating_cash_flow": ["CashFlowsFromUsedInOperatingActivities"],
+}
+
 
 def download_company_facts(cik):
     """Download the full XBRL fact file for one company."""
@@ -51,40 +63,45 @@ def download_company_facts(cik):
     return facts
 
 
-def extract_rows(ticker, facts):
+def extract_rows(ticker, facts, taxonomy, concept_map):
     """Turn the nested JSON into flat rows for the metrics we need."""
     rows = []
-    us_gaap = facts.get("facts", {}).get("us-gaap", {})
-    for metric, concepts in METRIC_CONCEPTS.items():
+    tagged_facts = facts.get("facts", {}).get(taxonomy, {})
+    for metric, concepts in concept_map.items():
         for concept in concepts:
-            usd_values = us_gaap.get(concept, {}).get("units", {}).get("USD", [])
-            for item in usd_values:
-                is_report = item.get("form", "").startswith(("10-K", "10-Q"))
-                is_recent = item.get("end", "") >= START_DATE
-                if is_report and is_recent and "start" in item:
-                    rows.append(
-                        {
-                            "ticker": ticker,
-                            "metric": metric,
-                            "concept": concept,
-                            "start": item["start"],
-                            "end": item["end"],
-                            "value": item["val"],
-                            "form": item["form"],
-                            "filed": item["filed"],
-                        }
-                    )
+            units = tagged_facts.get(concept, {}).get("units", {})
+            for currency, items in units.items():
+                for item in items:
+                    is_report = item.get("form", "").startswith(("10-K", "10-Q", "20-F"))
+                    is_recent = item.get("end", "") >= START_DATE
+                    if is_report and is_recent and "start" in item:
+                        rows.append(
+                            {
+                                "ticker": ticker,
+                                "metric": metric,
+                                "concept": concept,
+                                "start": item["start"],
+                                "end": item["end"],
+                                "value": item["val"],
+                                "currency": currency,
+                                "form": item["form"],
+                                "filed": item["filed"],
+                            }
+                        )
     return rows
 
 
 def main():
     companies = pd.read_csv(COMPANY_FILE)
-    sec_companies = companies[companies["source"] == "sec"]
+    sec_companies = companies[companies["cik"].notna()]
 
     all_rows = []
     for _, company in sec_companies.iterrows():
         facts = download_company_facts(company["cik"])
-        rows = extract_rows(company["ticker"], facts)
+        if company["source"] == "sec":
+            rows = extract_rows(company["ticker"], facts, "us-gaap", US_GAAP_CONCEPTS)
+        else:
+            rows = extract_rows(company["ticker"], facts, "ifrs-full", IFRS_CONCEPTS)
         all_rows.extend(rows)
         print(f"{company['ticker']:6} {facts.get('entityName', '')[:40]:40} {len(rows):5} facts")
         time.sleep(0.2)  # stay well below SEC's 10 requests per second limit

@@ -10,7 +10,7 @@ NVDA,NVIDIA,AI chips,3,1045810,sec,US
 AMD,Advanced Micro Devices,AI chips,3,2488,sec,US
 AVGO,Broadcom,AI chips,3,1730168,sec,US
 MRVL,Marvell Technology,AI chips,3,1835632,sec,US
-TSM,TSMC,Foundry,4,1046179,manual,Taiwan
+TSM,TSMC,Foundry,4,1046179,sec_ifrs,Taiwan
 MU,Micron Technology,Memory & storage,5,723125,sec,US
 STX,Seagate Technology,Memory & storage,5,1137789,sec,US
 ANET,Arista Networks,Networking,6,1596532,sec,US
