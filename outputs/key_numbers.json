@@ -1,0 +1,36 @@
+{
+  "period_base": "CY2022",
+  "period_latest": "TTM 2Q26",
+  "supplier_new_operating_income_busd": 347.8071,
+  "supplier_new_revenue_busd": 596.3402,
+  "ai_chips_share_of_new_profit": 0.6540875675050912,
+  "nvidia_share_of_new_profit": 0.5559259716089753,
+  "nvidia_new_operating_income_busd": 193.35500000000002,
+  "nvidia_operating_margin_ttm": 0.6521426284537363,
+  "memory_profit_per_new_revenue_dollar": 0.8450296387259139,
+  "memory_operating_margin_2022": 0.2081187684890983,
+  "memory_operating_margin_ttm": 0.6181088914696152,
+  "servers_new_revenue_busd": 81.3128,
+  "servers_new_operating_income_busd": 10.561200000000001,
+  "servers_profit_per_new_revenue_dollar": 0.12988360996054743,
+  "optical_split": {
+    "China modules (Innolight, Eoptolink)": {
+      "new_revenue": 12.506799999999998,
+      "new_operating_income": 5.5429,
+      "profit_per_new_revenue_dollar": 0.4431909041481435,
+      "operating_margin_ttm": 0.4083302729408178
+    },
+    "US-listed (Lumentum, Coherent, Fabrinet)": {
+      "new_revenue": 6.037099999999999,
+      "new_operating_income": 1.2313999999999998,
+      "profit_per_new_revenue_dollar": 0.2039721058123934,
+      "operating_margin_ttm": 0.12423764494053462
+    }
+  },
+  "cloud_capex_2022_busd": 157.762,
+  "cloud_capex_ttm_busd": 566.366,
+  "cloud_capex_to_ocf_2022": 0.5474406709672047,
+  "cloud_capex_to_ocf_ttm": 0.8181039476174037,
+  "cloud_cash_left_after_capex_2022_busd": 130.41899999999998,
+  "cloud_cash_left_after_capex_ttm_busd": 125.92499999999995
+}

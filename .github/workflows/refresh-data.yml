@@ -27,6 +27,15 @@ jobs:
       - name: Install packages
         run: pip install -r requirements.txt
 
+      # Charts use the Inter font; if this download fails they fall back to the default font
+      - name: Install Inter font
+        run: |
+          curl -sSL -o inter.zip https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip || exit 0
+          mkdir -p ~/.local/share/fonts
+          unzip -q -j inter.zip "extras/ttf/Inter-*.ttf" -d ~/.local/share/fonts || true
+          rm -f inter.zip
+          fc-cache -f > /dev/null 2>&1 || true
+
       - name: Run pipeline
         run: |
           python src/fetch_sec_data.py
