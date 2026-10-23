@@ -31,6 +31,9 @@ METRIC_CONCEPTS = {
     "gross_profit": ["GrossProfit"],
     "cost_of_revenue": ["CostOfRevenue", "CostOfGoodsAndServicesSold"],
     "operating_income": ["OperatingIncomeLoss"],
+    # backups, used only when a company stops tagging operating income directly
+    "operating_expenses": ["OperatingExpenses"],
+    "costs_and_expenses": ["CostsAndExpenses"],
     "capex": [
         "PaymentsToAcquirePropertyPlantAndEquipment",
         "PaymentsToAcquireProductiveAssets",
