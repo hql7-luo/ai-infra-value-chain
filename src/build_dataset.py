@@ -156,6 +156,8 @@ def check_quarters_add_up(unique_facts):
     print(f"Quarter check: {checked} fiscal years compared, {len(problems)} off by more than 0.5%")
     for problem in problems:
         print("  ", problem)
+    if problems:
+        raise ValueError(f"Fiscal-year reconciliation failed for {len(problems)} values")
 
 
 def build_quarterly_table(unique_facts):
@@ -173,8 +175,10 @@ def build_quarterly_table(unique_facts):
 
     duplicates = long_table.duplicated(["ticker", "metric", "calendar_quarter"], keep=False)
     if duplicates.any():
-        print("Warning: two fiscal quarters map to one calendar quarter")
-        print(long_table[duplicates].to_string())
+        raise ValueError(
+            "Multiple fiscal quarters map to one calendar quarter:\n"
+            + long_table[duplicates].to_string(index=False)
+        )
 
     quarterly = long_table.pivot_table(
         index=["ticker", "calendar_quarter"], columns="metric", values="value", aggfunc="last"
@@ -301,6 +305,8 @@ def check_tsmc_against_sec():
     merged = manual.merge(sec[["metric", "period", "sec_value"]], on=["metric", "period"], how="left")
     gap = (merged["reported"] - merged["sec_value"]).abs() / merged["sec_value"]
     print(f"TSMC check vs SEC 20-F: {len(merged)} values, largest difference {gap.max():.4%}")
+    if merged.empty or merged["sec_value"].isna().any() or (gap > 0.005).any():
+        raise ValueError("TSMC reconciliation failed: missing reference or difference above 0.5%")
 
 
 # ---------- Main ----------
