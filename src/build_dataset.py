@@ -14,6 +14,7 @@ Inputs:  data/raw/sec_facts.csv          (from fetch_sec_data.py)
 Outputs: data/processed/quarterly.csv    (US-listed companies, one row per calendar quarter)
          data/processed/periods.csv      (all companies, CY2022-CY2025 and TTM, USD billions)
 """
+import math
 import os
 
 import pandas as pd
@@ -141,6 +142,15 @@ def rebuild_quarters(facts):
     return quarters
 
 
+def reconciliation_gap(reported, reference):
+    """Relative absolute difference, rejecting non-finite values and zero mismatches."""
+    if not math.isfinite(reported) or not math.isfinite(reference):
+        return float("inf")
+    if reference == 0:
+        return 0.0 if reported == 0 else float("inf")
+    return abs(reported - reference) / abs(reference)
+
+
 def check_quarters_add_up(unique_facts):
     """Data check: the four rebuilt quarters of each fiscal year should add up to the reported year."""
     checked, problems = 0, []
@@ -148,9 +158,9 @@ def check_quarters_add_up(unique_facts):
         quarters = rebuild_quarters(facts)
         for _, year in facts[facts["days"].apply(is_year_length)].iterrows():
             inside = [value for end, value in quarters.items() if year["start"] < end <= year["end"]]
-            if len(inside) == 4 and year["value"] != 0:
+            if len(inside) == 4:
                 checked += 1
-                difference = abs(sum(inside) - year["value"]) / abs(year["value"])
+                difference = reconciliation_gap(sum(inside), year["value"])
                 if difference > 0.005:
                     problems.append(f"{ticker} {metric} {year['end'].date()}: {difference:.1%}")
     print(f"Quarter check: {checked} fiscal years compared, {len(problems)} off by more than 0.5%")
@@ -303,10 +313,14 @@ def check_tsmc_against_sec():
 
     sec = sec.rename(columns={"value": "sec_value"})
     merged = manual.merge(sec[["metric", "period", "sec_value"]], on=["metric", "period"], how="left")
-    gap = (merged["reported"] - merged["sec_value"]).abs() / merged["sec_value"]
+    gap = pd.Series(
+        [reconciliation_gap(reported, reference)
+         for reported, reference in zip(merged["reported"], merged["sec_value"])],
+        index=merged.index, dtype=float,
+    )
     print(f"TSMC check vs SEC 20-F: {len(merged)} values, largest difference {gap.max():.4%}")
-    if merged.empty or merged["sec_value"].isna().any() or (gap > 0.005).any():
-        raise ValueError("TSMC reconciliation failed: missing reference or difference above 0.5%")
+    if merged.empty or (gap > 0.005).any():
+        raise ValueError("TSMC reconciliation failed: non-finite value, missing reference or difference above 0.5%")
 
 
 # ---------- Main ----------
