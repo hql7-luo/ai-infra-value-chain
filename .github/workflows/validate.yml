@@ -1,0 +1,22 @@
+name: Validate committed analysis
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      # Validate the checked-in source snapshot without querying SEC or committing results.
+      - run: python src/build_dataset.py
+      - run: python src/analyze.py
+      - run: git diff --exit-code -- data/processed outputs
