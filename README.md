@@ -192,4 +192,4 @@ src/                      the four pipeline steps
 
 ---
 
-Independent project by Haoqi Luo. I set the question, the value-chain scope and the company list, and reviewed the data checks and conclusions; AI tools assisted with the code, data processing and drafting. This is industry analysis, not a recommendation to buy or sell any security.
+Independent project by Haoqi Luo. I chose the question, checked the data and results, and decided the conclusions. AI coding tools helped with the implementation. This is industry analysis, not a recommendation to buy or sell any security.
